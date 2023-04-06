@@ -1,4 +1,4 @@
-package me.mocadev.corespringsecurity.config;
+package me.mocadev.corespringsecurity.security.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -22,21 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.anyRequest().authenticated();
-		http
+			.anyRequest().authenticated()
+
+        .and()
 			.formLogin()
-			.loginPage("/loginPage")
-			.defaultSuccessUrl("/")
-			.failureUrl("/login")
-			.loginProcessingUrl("/login-proc")
-			.successHandler((request, response, authentication) -> {
-				log.info("authentication = {}", authentication.getName());
-				response.sendRedirect("/");
-			})
-			.failureHandler((request, response, exception) -> {
-				log.error("exception = {}", exception.getMessage());
-				response.sendRedirect("/loginPage");
-			})
-			.permitAll();
+		;
 	}
 }
