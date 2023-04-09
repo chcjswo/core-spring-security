@@ -3,3 +3,25 @@ spring:
         user:
             name: user
             password: 1111
+
+    datasource:
+        url: jdbc:mysql://localhost:3306/board
+        username: root
+        password: 1111
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+    jpa:
+        hibernate:
+            ddl-auto: create
+        defer-datasource-initialization: true
+        open-in-view: false
+
+    sql:
+        init-mode: always
+
+    data:
+        web:
+            pageable:
+                max-page-size: 2000
+                default-page-size: 20
+                one-indexed-parameters: true
