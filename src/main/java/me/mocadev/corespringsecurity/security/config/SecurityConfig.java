@@ -1,5 +1,6 @@
 package me.mocadev.corespringsecurity.security.config;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,10 +21,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @github https://github.com/chcjswo
  * @since 2023-03-27
  **/
+@RequiredArgsConstructor
 @Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	private final UserDetailsService userDetailsService;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -31,11 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		String password = passwordEncoder().encode("1111");
-
-		auth.inMemoryAuthentication().withUser("user").password(password).roles("USER");
-		auth.inMemoryAuthentication().withUser("manager").password(password).roles("MANAGER");
-		auth.inMemoryAuthentication().withUser("admin").password(password).roles("ADMIN");
+		auth.userDetailsService(userDetailsService);
 	}
 
 	@Override
