@@ -31,6 +31,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	private final UserRepository userRepository;
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -38,7 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
-		return new CustomAuthenticationProvider(new CustomUserDetailService(null), passwordEncoder());
+		return new CustomAuthenticationProvider(customUserDetailService(userRepository), passwordEncoder());
+	}
+
+	private UserDetailsService customUserDetailService(UserRepository userRepository) {
+		return new CustomUserDetailService(userRepository);
 	}
 
 	@Override
